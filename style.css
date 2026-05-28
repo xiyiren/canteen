@@ -48,14 +48,14 @@ body {
 
 /* ===== Night Mode (晚餐) ===== */
 #app.night-mode {
-  --bg: #1A1A2E;
-  --card: #252540;
-  --text: #E8E8F0;
-  --text-secondary: #9898B0;
-  --text-light: #686888;
-  --border: #353550;
+  --bg: #121218;
+  --card: #1E1E2A;
+  --text: #FFFFFF;
+  --text-secondary: #D0D0E0;
+  --text-light: #A0A0B8;
+  --border: #2E2E3E;
   --primary-light: #2D1A10;
-  --shadow: 0 2px 16px rgba(0,0,0,0.4);
+  --shadow: 0 2px 16px rgba(0,0,0,0.5);
 }
 #app.night-mode .home-btn-accent {
   background: linear-gradient(135deg, #FF6B35, #E55A2B);
