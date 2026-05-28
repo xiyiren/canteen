@@ -268,15 +268,25 @@ const MEAL_DATA = {
 
 /* ===== State ===== */
 let currentMeal = 'lunch'; // 'lunch' | 'dinner'
+let currentRestaurant = 'A2'; // 'A2' | 'A4'
 let currentCategoryId = null;
 let currentLineName = null;
 let lastWheelLine = null;
+
+function getRestaurant(lineName) {
+  return /[AB]区/.test(lineName) ? 'A4' : 'A2';
+}
 
 function getCategories() { return MEAL_DATA[currentMeal].categories; }
 function getCategory(id) { return getCategories().find(c => c.id === id); }
 function getLine(catId, lineName) {
   const cat = getCategory(catId);
   return cat ? cat.lines.find(l => l.name === lineName) : null;
+}
+function getFilteredCategories() {
+  return getCategories()
+    .map(cat => ({ ...cat, lines: cat.lines.filter(l => getRestaurant(l.name) === currentRestaurant) }))
+    .filter(cat => cat.lines.length > 0);
 }
 function getTodayDishes(catId, lineName) {
   const line = getLine(catId, lineName);
@@ -294,8 +304,19 @@ function showScreen(id) {
 /* ===== Screen 1: Home ===== */
 function updateHomeSubtitle() {
   const names = { lunch: '中午', dinner: '晚上' };
-  document.getElementById('homeSubtitle').textContent = `今天${names[currentMeal]}想吃什么呢？`;
+  const restaurants = { A2: 'A2餐厅', A4: 'A4号楼' };
+  document.getElementById('homeSubtitle').textContent = `今天${names[currentMeal]} · ${restaurants[currentRestaurant]}`;
 }
+
+// Restaurant toggle
+document.querySelectorAll('.restaurant-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.restaurant-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentRestaurant = btn.dataset.restaurant;
+    updateHomeSubtitle();
+  });
+});
 
 // Meal toggle
 document.querySelectorAll('.toggle-btn').forEach(btn => {
@@ -325,7 +346,7 @@ document.getElementById('backFromCategory').addEventListener('click', () => {
 });
 
 function renderCategoryGrid() {
-  const cats = getCategories();
+  const cats = getFilteredCategories();
   const grid = document.getElementById('categoryGrid');
   if (cats.length === 0) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#999;padding:60px 20px;font-size:15px;">晚餐数据还在整理中，稍后再来看看吧 🍳</div>';
@@ -360,7 +381,14 @@ function renderLines(catId) {
   const today = getToday();
   const todayName = DAY_NAMES[today];
 
-  container.innerHTML = cat.lines.map(line => {
+  const filteredLines = cat.lines.filter(l => getRestaurant(l.name) === currentRestaurant);
+
+  if (filteredLines.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#999;padding:40px 20px;font-size:15px;">当前餐厅暂无该分类的餐线</div>';
+    return;
+  }
+
+  container.innerHTML = filteredLines.map(line => {
     const dishes = line.weekMenu[today] || [];
     const preview = dishes.length > 0 ? dishes.slice(0, 3).join('、') + (dishes.length > 3 ? '…' : '') : '暂无';
     return `<div class="line-card" data-line="${line.name}">
@@ -435,7 +463,7 @@ function drawWheel(rotation) {
   const cx = size / 2;
   const cy = size / 2;
   const radius = size / 2 - 4;
-  const cats = getCategories();
+  const cats = getFilteredCategories();
   if (cats.length === 0) {
     ctx.clearRect(0, 0, size, size);
     ctx.fillStyle = '#F0F0F0';
@@ -446,7 +474,7 @@ function drawWheel(rotation) {
     ctx.font = `${size*0.06}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('暂无数据', cx, cy);
+    ctx.fillText('当前餐厅暂无餐线', cx, cy);
     return;
   }
   const n = cats.length;
@@ -496,14 +524,14 @@ function drawWheel(rotation) {
 }
 
 function spinWheel() {
-  if (isSpinning || getCategories().length === 0) return;
+  if (isSpinning || getFilteredCategories().length === 0) return;
   isSpinning = true;
   spinBtn.disabled = true;
   wheelHint.textContent = '转起来...';
 
   const duration = 2000 + Math.random() * 1000;
   const extraSpins = 4 + Math.floor(Math.random() * 4);
-  const cats = getCategories();
+  const cats = getFilteredCategories();
   const n = cats.length;
   const sliceAngle = (Math.PI * 2) / n;
   const targetIdx = Math.floor(Math.random() * n);
