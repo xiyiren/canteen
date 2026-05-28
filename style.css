@@ -61,6 +61,15 @@ body {
   background: linear-gradient(135deg, #FF6B35, #E55A2B);
   border-color: #FF6B35;
 }
+/* Ensure all text in dishes, line cards, and modals is bright */
+#app.night-mode .dish-item-name,
+#app.night-mode .dishes-line-name,
+#app.night-mode .line-card-name,
+#app.night-mode .line-card-today,
+#app.night-mode .wheel-hint,
+#app.night-mode .result-dish-name,
+#app.night-mode .result-meta { color: var(--text); }
+#app.night-mode .dish-item { background: var(--card); border-color: var(--border); }
 
 /* ===== Screens ===== */
 .screen {
@@ -394,7 +403,7 @@ body {
   transform: scale(0.98);
 }
 .dish-item-icon { font-size: 20px; flex-shrink: 0; }
-.dish-item-name { font-size: 16px; font-weight: 500; }
+.dish-item-name { font-size: 16px; font-weight: 500; color: var(--text); }
 
 /* ===== Screen 6: Result ===== */
 .result-content {
