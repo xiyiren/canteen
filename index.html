@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#FF6B35">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.json">
+  <title>讯飞食堂食谱选择</title>
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+  <div id="app">
+
+    <!-- Screen 1: Home -->
+    <div class="screen active" id="homeScreen">
+      <header class="header">
+        <h1 class="title">🍽️ 食堂食谱选择</h1>
+        <div class="meal-toggle" id="mealToggle">
+          <button class="toggle-btn active" data-meal="lunch">中餐</button>
+          <button class="toggle-btn" data-meal="dinner">晚餐</button>
+        </div>
+      </header>
+      <div class="home-content">
+        <p class="home-subtitle" id="homeSubtitle">今天中午想吃什么呢？</p>
+        <button class="home-btn" id="browseBtn">
+          <span class="home-btn-icon">📋</span>
+          <span class="home-btn-label">看看有什么</span>
+          <span class="home-btn-desc">浏览分类，自己选</span>
+        </button>
+        <button class="home-btn home-btn-accent" id="noIdeaBtn">
+          <span class="home-btn-icon">🎯</span>
+          <span class="home-btn-label">没想法，帮我选</span>
+          <span class="home-btn-desc">转盘抽选，听天由命</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Screen 2: Categories -->
+    <div class="screen" id="categoryScreen">
+      <header class="header">
+        <button class="back-btn" id="backFromCategory">‹</button>
+        <h1 class="title">选择分类</h1>
+        <div style="width:36px"></div>
+      </header>
+      <div class="category-grid" id="categoryGrid"></div>
+    </div>
+
+    <!-- Screen 3: Meal Lines -->
+    <div class="screen" id="linesScreen">
+      <header class="header">
+        <button class="back-btn" id="backFromLines">‹</button>
+        <h1 class="title" id="linesTitle">餐线列表</h1>
+        <div style="width:36px"></div>
+      </header>
+      <div class="lines-content" id="linesContent"></div>
+    </div>
+
+    <!-- Screen 4: Wheel -->
+    <div class="screen" id="wheelScreen">
+      <header class="header">
+        <button class="back-btn" id="backFromWheel">‹</button>
+        <h1 class="title">转一转</h1>
+        <div style="width:36px"></div>
+      </header>
+      <div class="wheel-section">
+        <div class="wheel-container">
+          <div class="wheel-pointer">▼</div>
+          <canvas id="wheelCanvas"></canvas>
+        </div>
+        <button class="spin-btn" id="spinBtn">转一转</button>
+        <div class="wheel-hint" id="wheelHint">看看转到哪个餐线</div>
+      </div>
+    </div>
+
+    <!-- Screen 5: Today's Dishes -->
+    <div class="screen" id="dishesScreen">
+      <header class="header">
+        <button class="back-btn" id="backFromDishes">‹</button>
+        <h1 class="title" id="dishesTitle">今日菜品</h1>
+        <div style="width:36px"></div>
+      </header>
+      <div class="dishes-header" id="dishesHeader">
+        <span class="dishes-day-label" id="dishesDayLabel">周一</span>
+        <span class="dishes-line-name" id="dishesLineName">清淡线</span>
+      </div>
+      <div class="dishes-content">
+        <div class="dishes-list" id="dishesList"></div>
+      </div>
+    </div>
+
+    <!-- Screen 6: Result -->
+    <div class="screen" id="resultScreen">
+      <header class="header">
+        <div style="width:36px"></div>
+        <h1 class="title">🎉 决定啦</h1>
+        <div style="width:36px"></div>
+      </header>
+      <div class="result-content">
+        <div class="result-icon-big">🍽️</div>
+        <div class="result-dish-name" id="resultDishName">干锅无骨鸭爪</div>
+        <div class="result-meta" id="resultMeta">来自：1号卖台</div>
+        <div class="result-actions">
+          <button class="spin-btn small" id="resultBackBtn">满意，记下了</button>
+          <button class="text-btn" id="resultAgainBtn">不满意，重新选</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wheel Result Modal -->
+    <div class="modal-overlay hidden" id="wheelResultModal">
+      <div class="modal modal-result">
+        <div class="result-icon">🎉</div>
+        <div class="modal-result-title">今天推荐</div>
+        <div class="result-big-text" id="wheelResultLine">1号卖台</div>
+        <div class="result-line-dishes" id="wheelResultDishes">干锅无骨鸭爪</div>
+        <button class="spin-btn small" id="wheelResultBtn">看看具体菜品</button>
+        <button class="text-btn" id="wheelReSpinBtn">不满意，再转一次</button>
+      </div>
+    </div>
+
+  </div>
+  <script src="index.js?v=2"></script>
+</body>
+</html>
